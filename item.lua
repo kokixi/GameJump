@@ -2,9 +2,9 @@ module( ..., package.seeall )
 
 
 -- Class Item
-function new( image )
+function new( image, dimX, dimY )
 	--The item is a coin by default
-	local item = display.newImage( image )
+	local item = display.newImageRect( image, dimX, dimY )
 	item.name = "coin"
 	physics.addBody( item, "static", { isSensor = true, radius = 20, bounce = 0.2 } )
 

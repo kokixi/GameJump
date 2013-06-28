@@ -2,7 +2,7 @@ module( ..., package.seeall )
 
 -- Class velocity
 function new()
-	local velocity = require("item").new( "rocket.png" )
+	local velocity = require("item").new( "rocket.png", 20, 47 )
 	velocity.name = "velocity"
 	velocity.speed = 30 --Maximum radius a coin is attracted from
 	velocity.enabled = false --If velocity is taking effect or not

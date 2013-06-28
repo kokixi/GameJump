@@ -2,7 +2,7 @@ module( ..., package.seeall )
 
 --Class Balloon inherits from Item
 function new()
-	local balloon = require("item").new("balloon.png")
+	local balloon = require("item").new("balloon.png", 28, 55 )
 	balloon.name = "balloon"
 	balloon.gravity = 1 --Value for gravity when player pick up this item
 

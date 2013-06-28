@@ -2,7 +2,7 @@ module( ..., package.seeall )
 
 --Class player
 function new()
-	local player = display.newImage( "player.png" )
+	local player = display.newImageRect( "player.png", 41, 53 )
 	player.name = "player"
 
 	physics.addBody( player, { radius = 40, friction = 1.0, density = 1.0, bounce = 0.2 } )

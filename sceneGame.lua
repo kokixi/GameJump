@@ -267,8 +267,8 @@ function sceneGame:createScene( event )
 
 
 	for i=1, 1000 do
-		coins[i] = Item.new( "coin.png" )
-		coins[i]:setX( math.random( 50, 600 ) )
+		coins[i] = Item.new( "coin.png", 25, 25 )
+		coins[i]:setX( math.random( 50, display.contentWidth - 50 ) )
 		coins[i]:setY( pos )
 
 		pos = pos-50
