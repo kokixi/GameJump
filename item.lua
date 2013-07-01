@@ -6,7 +6,7 @@ function new( image, dimX, dimY )
 	--The item is a coin by default
 	local item = display.newImageRect( image, dimX, dimY )
 	item.name = "coin"
-	physics.addBody( item, "static", { isSensor = true, radius = 20, bounce = 0.2 } )
+	physics.addBody( item, "static", { isSensor = true, radius = 12, bounce = 0.2 } )
 
 	function item:getName( )
 		return self.name

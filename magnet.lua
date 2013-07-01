@@ -4,7 +4,7 @@ module( ..., package.seeall )
 function new()
 	local magnet = require("item").new( "magnet.png", 30, 28 )
 	magnet.name = "magnet"
-	magnet.radius = 150 --Maximum radius a coin is attracted from
+	magnet.radius = 250 --Maximum radius a coin is attracted from
 	magnet.enabled = false --If magnet is taking effect or not
 
 	function magnet:setRadius( r )

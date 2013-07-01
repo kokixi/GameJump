@@ -5,7 +5,7 @@ function new()
 	local player = display.newImageRect( "player.png", 41, 53 )
 	player.name = "player"
 
-	physics.addBody( player, { radius = 40, friction = 1.0, density = 1.0, bounce = 0.2 } )
+	physics.addBody( player, { radius = 20, density = 0.5 } )
 
 	function player:setX( x )
 		player.x = x
