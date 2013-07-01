@@ -19,8 +19,6 @@ local monster
 local coins = {}
 local wall, wall2
 
-local group2 = display.newGroup()
-local group3 = display.newGroup()
 local group = display.newGroup()
 
 local pos = display.contentHeight * 0.8
@@ -38,8 +36,8 @@ local velo = -10 -- group movement speed
 local first = false
 local posGhost = 1
 local trans = transition.to( group, { y = group.y, time = 10 } )
-local trans2 = transition.to( group2, { y = group2.y, time = 10 } )
-local trans3 = transition.to( group3, { y = group3.y, time = 10 } )
+--local trans2 = transition.to( group2, { y = group2.y, time = 10 } )
+--local trans3 = transition.to( group3, { y = group3.y, time = 10 } )
 local active = true
 local ind = 1
 local textNumber
@@ -63,7 +61,6 @@ end
 local function distance( position )
 
 	if coins[position] ~= nil then
-		print( coins[position]:getX() )
 		if coins[position]:getX() ~= nil and coins[position]:getY()~= nil then
 			local A = math.pow( (monster:getX() - coins[position]:getX() ),2 )
 			local B = math.pow( (monster:getY() - coins[position]:getY() ),2 )
@@ -104,27 +101,27 @@ end
 --Animate the group that contains background and items
 
 local starp = 1
-
-local h = 0.3
+local oldModule = 0
+local wallCurrent = 2
+local mod
 
 local function moveGrupo( event )
---[[
-	xv,yv = monster:getLinearVelocity()
-	print( yv )
-	if yv > 100 then
-		velo = -velo
-	else
-		velo = -velo
+
+	mod = group.y % wall.contentHeight
+
+	if mod < oldModule then
+		if wallCurrent == 1 then
+			wall2.y = wall2.y - wall.contentHeight * 2
+			wallCurrent = 2
+		else
+			wall.y = wall.y - wall.contentHeight * 2
+			wallCurrent = 1
+		end
 	end
 
-	if group2.y >= 1920 then
-		group2.y = wall2.y + H
-		--print( wall.y )
-	end
+	oldModule = mod
 
-	if group3.y >= ( 1920 * 2 ) then
-		group3.y = -wall.y
-	end--]]
+
 
 	--[[if group.y % 600 == 0 then
 		for i = starp, starp + 6 do
@@ -138,19 +135,12 @@ local function moveGrupo( event )
 		starp = starp + 6
 	end--]]
 
-	if monster.y < display.contentHeight*h then
-		group.y = -monster.y + display.contentHeight*h
-		group2.y = -monster.y + display.contentHeight*h
-		group3.y = -monster.y + display.contentHeight*h
+	if monster.y < display.contentHeight*0.3 then
+		group.y = -monster.y + display.contentHeight*0.3
+		--group2.y = -monster.y + display.contentHeight*0.3
+		--group3.y = -monster.y + display.contentHeight*0.3
 	end
 
-	--group = group.y + monster.y  
-	--group2 = group2.y + monster.y 
-	--group3 = group3.y + monster.y 
-	--trans3 = transition.to( group3, { y = group3.y + velo, time = 10 } )
-	--trans2 = transition.to( group2, { y = group2.y + velo, time = 10 } )
-	--trans = transition.to( group, { y = group.y + velo, time = 10, onComplete = moveGrupo } )
---	monster:setY( monster.yOrigin - velo )
 
 	-- if the player falls down under a certain thresold the game is over
 
@@ -162,19 +152,19 @@ local function moveGrupo( event )
 --	end
 
 
---[[	if ( monster.yOrigin + group.y ) > display.contentHeight  then
+	if ( monster.yOrigin + group.y ) > display.contentHeight  then
 		transition.cancel( trans )
 		transition.cancel( trans2 )
 		transition.cancel( trans3 )
 		storyboard.gotoScene( "sceneMenu" )
-	end--]]
+	end
 
 
 
 end
 
 -- this function watches that the player doesn't surpass a certain thresold
-local function setLimit(event)
+--[[local function setLimit(event)
 
 	if monster:getY() < display.contentHeight * 0.4 then
 
@@ -186,7 +176,7 @@ local function setLimit(event)
 			moveGrupo( )
 		end
 	end
-end
+end--]]
 
 --Save on file the ghost's position
 local function savePosGhost(event)
@@ -211,20 +201,22 @@ local function collisionWithItem( self, event )
 		--if item is a magnet, enabled magnet
 		if event.other:getName() == "magnet" then
 			mg:enabledRadius( true )
-			velo = -30
 			--Runtime:addEventListener( "enterFrame", attract )
-			timer.performWithDelay( 3000, 
+			--velo = -30
+			--[[timer.performWithDelay( 3000, 
 				function( ) 
 					velo = -10 
 					Runtime:removeEventListener( "enterFrame", attract ) 
 					mg:enabledRadius( false ) 
-				end, 1 )
+				end, 1 )--]]
 		end
 
 		--if item is a balloon, enabled balloon
 		if event.other:getName() == "balloon" then
 			balloonEnabled = true
 			gravity = ball:getGravity()
+			timer.performWithDelay( 3000, function() gravity = 9.8 end, 1 )
+
 		end
 
 
@@ -235,18 +227,18 @@ local function collisionWithItem( self, event )
 		timer.cancel( timerBalloon )
 		if event.other:getName() == "velocity" then
 			velo = vl:getSpeed()
-			timer.performWithDelay( 2000, function() velo = 15 end, 1 )
+			timer.performWithDelay( 2000, function() velo = -10 end, 1 )
 			--velo = 20
 		end
 
-		if active then
-			active = false
-			monster:setLinearVelocity( 0,0 )
-		end
-		if ( monster.yOrigin + group.y ) > ( display.contentHeight*0.3 ) then
-			monster:setLinearVelocity( 0,0 )
-			monster:applyLinearImpulse( 0, velo, monster:getX(), monster:getY() )
-		end
+		--if active then
+		--	active = false
+		--	monster:setLinearVelocity( 0,0 )
+		--end
+		--if ( monster.yOrigin + group.y ) > ( display.contentHeight*0.3 ) then
+		monster:setLinearVelocity( 0,0 )
+		monster:applyLinearImpulse( 0, velo, monster:getX(), monster:getY() )
+		--end
 
 		
 --[[
@@ -371,7 +363,7 @@ local function startGame( )
 	monster:applyLinearImpulse( 0, -80, monster:getX(), monster:getY() )
 	timer.performWithDelay( 1500, function() physics.setGravity( 0, 9.8 ) end, 1 ) 
 
-	Runtime:addEventListener("enterFrame", setLimit)
+	--Runtime:addEventListener("enterFrame", setLimit)
 	Runtime:addEventListener("accelerometer", acc) 
 
 	f = ghostIcon:openFile()
@@ -422,8 +414,8 @@ function sceneGame:createScene( event )
 	wall2.y = -(-wall.y + wall.contentHeight )
 
 
-	group2:insert( wall )
-	group3:insert( wall2 )
+	group:insert( wall )
+	group:insert( wall2 )
 
 	mg = Magnet.new( )
 	mg:setX(display.contentWidth * 0.5)
@@ -454,7 +446,7 @@ function sceneGame:createScene( event )
 
 	for i=1, 1000 do
 		coins[i] = Item.new( "coin.png", 25, 25 )
-		coins[i]:setX( math.random( 50, display.contentWidth - 50 ) )
+		coins[i]:setX( math.random( 150, 200 ) )
 		coins[i]:setY( pos )
 
 		pos = pos-50
@@ -496,7 +488,7 @@ function sceneGame:enterScene( event )
 end
 
 function sceneGame:exitScene( event )
-	Runtime:removeEventListener("enterFrame", setLimit)
+	--Runtime:removeEventListener("enterFrame", setLimit)
 	Runtime:removeEventListener("accelerometer", acc)
 	Runtime:removeEventListener("enterFrame", drawGhost)
 	Runtime:removeEventListener("enterFrame",savePosGhost)
